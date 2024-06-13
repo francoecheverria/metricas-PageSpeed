@@ -1,0 +1,26 @@
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f8fafc;
+    background-image: url('https://flowbite.s3.amazonaws.com/docs/jumbotron/hero-pattern.svg');
+    color: #636b6f;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+}
+.container {
+    max-width: 600px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+h1 {
+    margin-bottom: 20px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
