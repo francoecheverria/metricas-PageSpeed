@@ -63,6 +63,14 @@
         </div>
         <div id="results" class="text-center"></div>
     </div>
+
+    <div class="container text-center section" id="metric-chart-section">
+        <h1>Metrics Charts</h1>
+        <div style="width: 50%; margin: auto;">
+            <canvas id="myChart" width="200" height="100"></canvas>
+        </div>
+    </div>
+
     <div class="container section" id="metric-history-section">
         <h1 class="text-center">Metric History</h1>
         <div class="table-responsive">
@@ -82,9 +90,8 @@
             </table>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="/DataTables/datatables.js"></script>
@@ -93,9 +100,12 @@
 
             $('#loading').hide();
             $('#run-metrics-section').addClass('active');
+            $('#metric-chart-section').addClass('active');
+
             $('.button-run-metrics').on('click', function() {
                 $('.section').removeClass('active');
                 $('#run-metrics-section').addClass('active');
+                $('#metric-chart-section').addClass('active');
 
                 $('.button-history-metrics').removeClass('btn-info');
                 $('.button-history-metrics').addClass('btn-secondary');
@@ -142,20 +152,64 @@
                             resultsHtml += '<div class="result-card">';
                             resultsHtml += '<div class="result-title">' + category
                                 .toUpperCase() + '</div>';
-                            resultsHtml += '<div class="result-score">' + (data[category] !==
-                                null ? data[category] : 'N/A') + '</div>';
+                            resultsHtml += '<div class="result-score">' + (data[category]) + '</div>';
                             resultsHtml += '</div>';
                         }
 
                         $('#results').show();
                         $('#results').html(resultsHtml);
+
+                        createChart(categories, data);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         $('#loading').hide();
                         $('#results').show().html('Error: ' + errorThrown);
                     }
+                    
                 });
             });
+
+            function createChart(categories, scores) {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: categories.map(function(category) {
+                            return category.toUpperCase();
+                        }),
+                        datasets: [{
+                            label: [''],
+                            data: categories.map(function(category) {
+                                return scores[category];
+                            }),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
 
             $('#datatable').DataTable({
                 paging: false,

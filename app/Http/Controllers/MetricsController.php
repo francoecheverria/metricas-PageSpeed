@@ -49,12 +49,20 @@ class MetricsController extends Controller
             $data = $response->toArray();
 
 
+            
             $scores = [];
             foreach ($categories as $category) {
-                if (isset($data['lighthouseResult']['categories'][strtolower($category)]['score'])) {
-                    $scores[strtolower($category)] = $data['lighthouseResult']['categories'][strtolower($category)]['score'];
+
+                $apiCategory = strtolower($category);
+
+                if ($category === 'BEST_PRACTICES') {
+                    $apiCategory = 'best-practices';
+                }
+
+                if (isset($data['lighthouseResult']['categories'][$apiCategory]['score'])) {
+                    $scores[$category] = $data['lighthouseResult']['categories'][$apiCategory]['score'];
                 } else {
-                    $scores[strtolower($category)] = null;
+                    $scores[$category] = null;
                 }
             }
 
@@ -67,6 +75,7 @@ class MetricsController extends Controller
             $metrics->best_practices_metric = isset($data['lighthouseResult']['categories']['best-practices']['score']) ? $data['lighthouseResult']['categories']['best-practices']['score'] : null;
             $metrics->strategy_id = $strategy;
             $metrics->save();
+
 
             return response()->json($scores);
         } catch (\Exception $e) {
