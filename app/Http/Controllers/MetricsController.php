@@ -34,11 +34,17 @@ class MetricsController extends Controller
     public function getMetrics(Request $request)
     {
 
+        $request->validate([
+            'url' => 'required|url',
+            'categories' => 'required|array',
+            'strategy' => 'required|exists:strategies,id'
+        ]);
+
         $url = $request->input('url');
         $categories = $request->input('categories');
         $strategy = $request->input('strategy');
 
-        $apiKey = 'AIzaSyDCrPAzhzWxZbJxPYIEURODTvBFVVRNHbY';
+        $apiKey = env('PAGESPEED_API_KEY');
         $categoriesString = implode('&category=', $categories);
         $apiUrl = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={$url}&key={$apiKey}&category={$categoriesString}&strategy={$strategy}";
 
@@ -47,8 +53,6 @@ class MetricsController extends Controller
         try {
             $response = $client->request('GET', $apiUrl);
             $data = $response->toArray();
-
-
             
             $scores = [];
             foreach ($categories as $category) {

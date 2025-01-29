@@ -40,30 +40,40 @@ body {
 #results {
     margin-top: 20px;
     white-space: pre-wrap;
-    background: #f1f1f1;
     padding: 10px;
     border-radius: 8px;
 }
 
 .result-card {
     display: inline-block;
-    width: 200px;
     margin: 10px;
     padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     text-align: center;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .result-title {
     font-size: 18px;
+    font-weight: bold;
     margin-bottom: 10px;
-    color: #636b6f;
 }
 
 .result-score {
-    font-size: 36px;
+    font-size: 24px;
     font-weight: bold;
-    color: #3ac7f3;
+}
+
+/* Colores basados en el score */
+.result-card[data-score="high"] {
+    background-color: #d4edda; /* Verde claro */
+}
+
+.result-card[data-score="medium"] {
+    background-color: #fff3cd; /* Amarillo claro */
+}
+
+.result-card[data-score="low"] {
+    background-color: #f8d7da; /* Rojo claro */
 }
